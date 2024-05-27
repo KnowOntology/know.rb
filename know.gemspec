@@ -10,15 +10,15 @@ Gem::Specification.new do |gem|
   gem.summary            = "The Know Framework for Ruby"
   gem.description        = ""
   gem.metadata           = {
-    'bug_tracker_uri'   => "https://github.com/HaltiaAI/know.rb/issues",
-    'changelog_uri'     => "https://github.com/HaltiaAI/know.rb/blob/master/CHANGES.md",
-    'documentation_uri' => "https://github.com/HaltiaAI/know.rb/blob/master/README.md",
+    'bug_tracker_uri'   => "https://github.com/KnowOntology/know.rb/issues",
+    'changelog_uri'     => "https://github.com/KnowOntology/know.rb/blob/master/CHANGES.md",
+    'documentation_uri' => "https://github.com/KnowOntology/know.rb/blob/master/README.md",
     'homepage_uri'      => gem.homepage,
-    'source_code_uri'   => "https://github.com/HaltiaAI/know.rb",
+    'source_code_uri'   => "https://github.com/KnowOntology/know.rb",
   }
 
-  gem.author             = "Haltia.AI"
-  gem.email              = "support@haltia.ai"
+  gem.author             = "KNOW Project"
+  gem.email              = "support@know.dev"
 
   gem.platform           = Gem::Platform::RUBY
   gem.files              = %w(AUTHORS CHANGES.md README.md UNLICENSE VERSION) + Dir.glob('lib/**/*.rb')
