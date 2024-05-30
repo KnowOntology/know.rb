@@ -20,7 +20,7 @@ $ gem install know
 
 ## 👉 Examples
 
-### Importing the library
+### Importing the framework
 
 ```ruby
 require 'know'
