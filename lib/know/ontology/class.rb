@@ -13,6 +13,25 @@ class Know::Ontology::Class < Know::Ontology::Concept
   end
 
   ##
+  # @return [Class]
+  attr_reader :superclass
+  def superclass() self.superclasses.first end
+
+  ##
+  # @return [Array<Class>]
+  attr_reader :superclasses
+  def superclasses
+    self.fetch_concepts(RDFS[:subClassOf])
+  end
+
+  ##
+  # @return [Array<Class>]
+  attr_reader :subclasses
+  def subclasses
+    raise NotImplementedError # TODO
+  end
+
+  ##
   # @return [Property]
   def [](symbol)
     raise NotImplementedError # TODO

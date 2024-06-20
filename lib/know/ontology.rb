@@ -24,18 +24,27 @@ class Know::Ontology
   include ::RDF
 
   ##
-  # @return [RDF::Graph]
-  attr_reader :graph
-
-  ##
   # @example Loading the ontology in Turtle format
   #   require 'rdf/turtle'
-  #   Know::Ontology::new('/path/to/know.ttl')
+  #   Know::Ontology.load('/path/to/know.ttl')
   #
   # @param path_or_url [String]
-  def initialize(path_or_url)
-    @graph = RDF::Graph.load(path_or_url)
+  def self.load(path_or_url)
+    self.new(RDF::Graph.load(path_or_url))
   end
+
+  ##
+  # @param graph [RDF::Queryable]
+  def initialize(graph)
+    unless graph.is_a?(RDF::Queryable)
+      raise ArgumentError, "expected an RDF::Queryable, but got #{graph.inspect}"
+    end
+    @graph = graph
+  end
+
+  ##
+  # @return [RDF::Graph]
+  attr_reader :graph
 
   ##
   # @example Looking up a concept
@@ -43,9 +52,39 @@ class Know::Ontology
   #   ontology[:name]    #=> #<Know::Ontology::Property :name>
   #   ontology[:random]  #=> nil
   #
+  # @param concept [Symbol, RDF::URI]
   # @return [Concept]
-  def [](symbol)
-    self.concepts.find { |concept| concept.symbol == symbol }
+  def [](concept)
+    case concept
+      when Symbol then self.lookup_by_name(concept)
+      when RDF::URI then self.lookup_by_uri(concept)
+      else nil
+    end
+  end
+
+  ##
+  # @param concept_name [Symbol, #to_sym]
+  # @return [Concept]
+  def lookup_by_name(concept_name)
+    concept_name = concept_name.to_sym
+    self.concepts.find { |concept| concept.symbol == concept_name }
+  end
+
+  ##
+  # @param concept_uri [RDF::URI]
+  # @return [Concept]
+  def lookup_by_uri(concept_uri)
+    concept_curie = concept_uri.qname(prefixes: PREFIXES)
+    case concept_curie.first
+      when :know
+        concept_name = concept_curie.last
+        concept_class = case concept_name[0]
+          when /\A[A-Z]\z/ then ::Know::Ontology::Class
+          else ::Know::Ontology::Property
+        end
+        concept_class.new(self, concept_name)
+      else nil
+    end
   end
 
   ##
