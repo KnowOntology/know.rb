@@ -31,6 +31,10 @@ class Know::Ontology::Class < Know::Ontology::Concept
     raise NotImplementedError # TODO
   end
 
+  def top?
+    self.name == :Thing
+  end
+
   ##
   # @return [Property]
   def [](symbol)
@@ -52,6 +56,8 @@ class Know::Ontology::Class < Know::Ontology::Concept
   # @return [Enumerator]
   def each_property(&block)
     return enum_for(:each_property) unless block_given?
-    raise NotImplementedError # TODO
+    self.ontology.each_property do |property| # TODO: optimize this
+      block.call(property) if property.domain.name == self.name
+    end
   end
 end # Know::Ontology::Class

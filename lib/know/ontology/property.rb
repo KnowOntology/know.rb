@@ -13,6 +13,26 @@ class Know::Ontology::Property < Know::Ontology::Concept
   end
 
   ##
+  # @return [Boolean]
+  def datatype?
+    self.fetch_objects(RDF[:type]).include?(OWL[:DatatypeProperty])
+  end
+
+  ##
+  # @return [Boolean]
+  def functional?
+    self.fetch_objects(RDF[:type]).include?(OWL[:FunctionalProperty])
+  end
+
+  ##
+  # @return [Range]
+  def cardinality
+    min = 0
+    max = self.functional? ? 1 : nil
+    (min..max)
+  end
+
+  ##
   # @return [Class]
   attr_reader :domain
   def domain() self.domains.first end

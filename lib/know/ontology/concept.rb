@@ -23,6 +23,7 @@ class Know::Ontology::Concept
 
   # @return [Symbol]
   attr_reader :symbol
+  alias_method :name, :symbol
 
   # @return [String]
   attr_reader :glyph
